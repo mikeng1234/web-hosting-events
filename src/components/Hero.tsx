@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { motion } from "framer-motion";
 
 export default function Hero() {
   return (
@@ -6,7 +9,6 @@ export default function Hero() {
       id="hero"
       className="relative min-h-screen flex items-center justify-center text-center px-6 overflow-hidden"
     >
-      {/* Background photo */}
       <Image
         src="/images/hero-bg.png"
         alt=""
@@ -15,11 +17,7 @@ export default function Hero() {
         priority
         quality={90}
       />
-
-      {/* Dark overlay — preserves the drama of the awards night shot */}
       <div className="absolute inset-0 bg-black/60" />
-
-      {/* Subtle gold glow accents */}
       <div
         className="absolute inset-0 opacity-20 pointer-events-none"
         style={{
@@ -28,25 +26,50 @@ export default function Hero() {
         }}
       />
 
-      {/* Content */}
+      {/* Staggered text reveal */}
       <div className="relative z-10 max-w-3xl mx-auto">
-        <p className="text-gold tracking-[0.3em] uppercase text-xs mb-6">
+        <motion.p
+          className="text-gold tracking-[0.3em] uppercase text-xs mb-6"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+        >
           Professional Event Host
-        </p>
+        </motion.p>
 
-        <span className="divider-gold" />
+        <motion.span
+          className="divider-gold"
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: 1 }}
+          transition={{ duration: 0.6, delay: 0.5 }}
+        />
 
-        <h1 className="font-display text-5xl md:text-7xl text-ivory leading-tight mt-6 mb-4">
+        <motion.h1
+          className="font-display text-5xl md:text-7xl text-ivory leading-tight mt-6 mb-4"
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        >
           Host Nellie
-        </h1>
+        </motion.h1>
 
-        <p className="text-cream/80 text-lg md:text-xl font-light leading-relaxed mb-10 max-w-xl mx-auto">
+        <motion.p
+          className="text-cream/80 text-lg md:text-xl font-light leading-relaxed mb-10 max-w-xl mx-auto"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.9, ease: [0.22, 1, 0.36, 1] }}
+        >
           Weddings, corporate galas, birthdays &amp; beyond —<br />
           every event deserves a host who makes it{" "}
           <em className="text-gold not-italic">unforgettable</em>.
-        </p>
+        </motion.p>
 
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        <motion.div
+          className="flex flex-col sm:flex-row gap-4 justify-center"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 1.1, ease: [0.22, 1, 0.36, 1] }}
+        >
           <a
             href="#book"
             className="px-8 py-4 bg-gold text-ivory text-sm tracking-widest uppercase hover:bg-gold-light transition-colors"
@@ -59,14 +82,24 @@ export default function Hero() {
           >
             Meet Nellie
           </a>
-        </div>
+        </motion.div>
       </div>
 
       {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-cream/40">
+      <motion.div
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-cream/40"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.6, duration: 1 }}
+      >
         <span className="text-xs tracking-widest uppercase">Scroll</span>
-        <span className="w-px h-10 bg-cream/20 block" />
-      </div>
+        <motion.span
+          className="w-px h-10 bg-cream/20 block origin-top"
+          initial={{ scaleY: 0 }}
+          animate={{ scaleY: 1 }}
+          transition={{ delay: 1.8, duration: 0.6 }}
+        />
+      </motion.div>
     </section>
   );
 }

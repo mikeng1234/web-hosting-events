@@ -1,7 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { SlideLeft, SlideRight } from "@/components/ui/Motion";
 
 const logos = [
   { src: "/images/companies/asialink.png", alt: "Asialink Finance Corporation" },
@@ -17,31 +18,39 @@ const logos = [
   { src: "/images/companies/pacific-plaza.png", alt: "Pacific Plaza Towers" },
 ];
 
-// Group logos into pages of 4
-const ITEMS_PER_PAGE = 4;
-const pages: typeof logos[] = [];
-for (let i = 0; i < logos.length; i += ITEMS_PER_PAGE) {
-  pages.push(logos.slice(i, i + ITEMS_PER_PAGE));
-}
-const TOTAL_PAGES = pages.length;
+const TOTAL = logos.length;
 
 export default function Clients() {
-  const [page, setPage] = useState(0);
-  const [paused, setPaused] = useState(false);
+  const [current, setCurrent] = useState(0);
+  const [itemWidth, setItemWidth] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
   const touchStartX = useRef(0);
 
+  // Measure how wide each logo card should be (container / visible count)
+  useEffect(() => {
+    const measure = () => {
+      if (!containerRef.current) return;
+      const visible = window.innerWidth < 640 ? 3 : 5;
+      setItemWidth(containerRef.current.offsetWidth / visible);
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
+
   const next = useCallback(
-    () => setPage((p) => (p + 1) % TOTAL_PAGES),
+    () => setCurrent((c) => Math.min(c + 1, TOTAL - 1)),
     []
   );
-  const prev = () => setPage((p) => (p - 1 + TOTAL_PAGES) % TOTAL_PAGES);
+  const prev = () => setCurrent((c) => Math.max(c - 1, 0));
 
-  // Auto-advance every 3.5s, pauses on hover/touch
+  // Auto-advance
   useEffect(() => {
-    if (paused) return;
-    const t = setInterval(next, 3500);
+    const t = setInterval(() => {
+      setCurrent((c) => (c + 1 >= TOTAL ? 0 : c + 1));
+    }, 3500);
     return () => clearInterval(t);
-  }, [paused, next]);
+  }, []);
 
   // Touch swipe
   const onTouchStart = (e: React.TouchEvent) => {
@@ -49,15 +58,15 @@ export default function Clients() {
   };
   const onTouchEnd = (e: React.TouchEvent) => {
     const diff = touchStartX.current - e.changedTouches[0].clientX;
-    if (diff > 50) next();
-    else if (diff < -50) prev();
+    if (diff > 40) next();
+    else if (diff < -40) prev();
   };
 
   return (
     <section id="clients" style={{ background: "#111111" }}>
       {/* Split: photo + heading */}
       <div className="flex flex-col md:flex-row min-h-[320px]">
-        <div className="relative w-full md:w-2/5 min-h-[220px] md:min-h-0">
+        <SlideLeft className="relative w-full md:w-2/5 min-h-[220px] md:min-h-0">
           <Image
             src="/images/portfolio/sample2.png"
             alt="Host Nellie speaking at a corporate event"
@@ -67,12 +76,10 @@ export default function Clients() {
             quality={85}
           />
           <div className="absolute inset-0 bg-black/30" />
-        </div>
+        </SlideLeft>
 
-        <div className="w-full md:w-3/5 flex flex-col justify-center px-8 py-10 md:px-14">
-          <p className="text-gold tracking-[0.25em] uppercase text-xs mb-3">
-            Trusted By
-          </p>
+        <SlideRight delay={0.15} className="w-full md:w-3/5 flex flex-col justify-center px-8 py-10 md:px-14">
+          <p className="text-gold tracking-[0.25em] uppercase text-xs mb-3">Trusted By</p>
           <h2 className="font-display text-3xl md:text-4xl text-ivory leading-tight mb-4">
             Companies &amp; Brands
           </h2>
@@ -81,69 +88,69 @@ export default function Clients() {
             From corporate giants to beloved local brands — Nellie has hosted
             events for some of the Philippines&apos; most recognisable names.
           </p>
-        </div>
+        </SlideRight>
       </div>
 
       {/* Carousel */}
-      <div
-        className="border-t border-white/10 px-6 md:px-14 pt-8 pb-10"
-        onMouseEnter={() => setPaused(true)}
-        onMouseLeave={() => setPaused(false)}
-        onTouchStart={onTouchStart}
-        onTouchEnd={onTouchEnd}
-      >
-        {/* Track — slides between pages */}
-        <div className="overflow-hidden">
+      <div className="border-t border-white/10 py-10">
+        {/* Track */}
+        <div
+          ref={containerRef}
+          className="overflow-hidden px-0"
+          onTouchStart={onTouchStart}
+          onTouchEnd={onTouchEnd}
+        >
           <div
             className="flex transition-transform duration-500 ease-in-out"
-            style={{ transform: `translateX(-${page * 100}%)` }}
+            style={{
+              transform: itemWidth ? `translateX(-${current * itemWidth}px)` : "none",
+            }}
           >
-            {pages.map((pageLogos, pageIdx) => (
+            {logos.map((logo) => (
               <div
-                key={pageIdx}
-                className="w-full shrink-0 grid grid-cols-2 md:grid-cols-4 gap-4"
+                key={logo.alt}
+                className="shrink-0 px-3"
+                style={{ width: itemWidth || "20%" }}
               >
-                {pageLogos.map((logo) => (
-                  <div
-                    key={logo.alt}
-                    className="bg-white rounded-sm flex items-center justify-center p-4 h-20"
-                  >
-                    <div className="relative w-full h-full">
-                      <Image
-                        src={logo.src}
-                        alt={logo.alt}
-                        fill
-                        className="object-contain"
-                        sizes="200px"
-                      />
-                    </div>
+                <div className="bg-white rounded-sm flex items-center justify-center p-4 h-20">
+                  <div className="relative w-full h-full">
+                    <Image
+                      src={logo.src}
+                      alt={logo.alt}
+                      fill
+                      className="object-contain"
+                      sizes="160px"
+                    />
                   </div>
-                ))}
+                </div>
               </div>
             ))}
           </div>
         </div>
 
         {/* Controls */}
-        <div className="flex items-center justify-center gap-6 mt-7">
+        <div className="flex items-center justify-center gap-5 mt-8 px-6">
           {/* Prev */}
           <button
             onClick={prev}
+            disabled={current === 0}
             aria-label="Previous"
-            className="w-8 h-8 flex items-center justify-center border border-white/20 text-white/50 hover:border-gold hover:text-gold transition-colors"
+            className="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center text-white/50 hover:border-gold hover:text-gold transition-colors disabled:opacity-20 disabled:cursor-not-allowed"
           >
             &#8592;
           </button>
 
-          {/* Dots */}
-          <div className="flex gap-2">
-            {Array.from({ length: TOTAL_PAGES }).map((_, i) => (
+          {/* Dots — one per logo */}
+          <div className="flex gap-1.5">
+            {logos.map((_, i) => (
               <button
                 key={i}
-                onClick={() => setPage(i)}
-                aria-label={`Go to page ${i + 1}`}
-                className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                  i === page ? "bg-gold w-6" : "bg-white/20 hover:bg-white/40"
+                onClick={() => setCurrent(i)}
+                aria-label={`Go to logo ${i + 1}`}
+                className={`rounded-full transition-all duration-300 ${
+                  i === current
+                    ? "bg-gold w-5 h-2"
+                    : "bg-white/20 hover:bg-white/40 w-2 h-2"
                 }`}
               />
             ))}
@@ -152,8 +159,9 @@ export default function Clients() {
           {/* Next */}
           <button
             onClick={next}
+            disabled={current === TOTAL - 1}
             aria-label="Next"
-            className="w-8 h-8 flex items-center justify-center border border-white/20 text-white/50 hover:border-gold hover:text-gold transition-colors"
+            className="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center text-white/50 hover:border-gold hover:text-gold transition-colors disabled:opacity-20 disabled:cursor-not-allowed"
           >
             &#8594;
           </button>
