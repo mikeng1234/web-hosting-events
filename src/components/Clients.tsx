@@ -14,44 +14,57 @@ const logos = [
   { src: "/images/companies/pacific-plaza.png", alt: "Pacific Plaza Towers" },
 ];
 
+// Duplicate for seamless infinite loop
+const marqueeLogos = [...logos, ...logos];
+
 export default function Clients() {
   return (
-    <section id="clients" className="flex flex-col md:flex-row min-h-[520px]">
-      {/* Left — action photo */}
-      <div className="relative w-full md:w-2/5 min-h-[280px] md:min-h-0">
-        <Image
-          src="/images/portfolio/sample2.png"
-          alt="Host Nellie speaking at a corporate event"
-          fill
-          className="object-cover object-center"
-          sizes="(max-width: 768px) 100vw, 40vw"
-          quality={85}
-        />
-        {/* Dark gradient fading into the right panel on desktop */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-black/10 to-black/60 md:block hidden" />
-        <div className="absolute inset-0 bg-black/30 md:hidden" />
+    <section id="clients" style={{ background: "#111111" }}>
+      {/* Top — split photo + heading */}
+      <div className="flex flex-col md:flex-row min-h-[360px]">
+        {/* Left: action photo */}
+        <div className="relative w-full md:w-2/5 min-h-[240px] md:min-h-0">
+          <Image
+            src="/images/portfolio/sample2.png"
+            alt="Host Nellie speaking at a corporate event"
+            fill
+            className="object-cover object-center"
+            sizes="(max-width: 768px) 100vw, 40vw"
+            quality={85}
+          />
+          <div className="absolute inset-0 bg-black/30" />
+        </div>
+
+        {/* Right: heading */}
+        <div className="w-full md:w-3/5 flex flex-col justify-center px-8 py-12 md:px-14">
+          <p className="text-gold tracking-[0.25em] uppercase text-xs mb-3">
+            Trusted By
+          </p>
+          <h2 className="font-display text-3xl md:text-4xl text-ivory leading-tight mb-4">
+            Companies &amp; Brands
+          </h2>
+          <span className="block w-10 h-px bg-gold mb-4" />
+          <p className="text-cream/50 text-sm leading-relaxed max-w-md">
+            From corporate giants to beloved local brands — Nellie has hosted
+            events for some of the Philippines&apos; most recognisable names.
+          </p>
+        </div>
       </div>
 
-      {/* Right — dark panel with logos */}
-      <div
-        className="w-full md:w-3/5 flex flex-col justify-center px-8 py-14 md:px-14"
-        style={{ background: "#111111" }}
-      >
-        {/* Header */}
-        <p className="text-gold tracking-[0.25em] uppercase text-xs mb-3">
-          Trusted By
-        </p>
-        <h2 className="font-display text-3xl md:text-4xl text-ivory leading-tight mb-2">
-          Companies &amp; Brands
-        </h2>
-        <span className="block w-10 h-px bg-gold mb-8" />
+      {/* Bottom — infinite scrolling logo carousel */}
+      <div className="border-t border-white/10 py-10 overflow-hidden relative">
+        {/* Fade edges */}
+        <div className="absolute left-0 top-0 bottom-0 w-16 z-10 pointer-events-none"
+          style={{ background: "linear-gradient(to right, #111111, transparent)" }} />
+        <div className="absolute right-0 top-0 bottom-0 w-16 z-10 pointer-events-none"
+          style={{ background: "linear-gradient(to left, #111111, transparent)" }} />
 
-        {/* Logo grid — white cards so every logo reads cleanly on dark bg */}
-        <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
-          {logos.map((logo) => (
+        <div className="marquee-track">
+          {marqueeLogos.map((logo, i) => (
             <div
-              key={logo.alt}
-              className="bg-white rounded-sm p-3 flex items-center justify-center h-16"
+              key={`${logo.alt}-${i}`}
+              className="mx-4 bg-white rounded-sm flex items-center justify-center shrink-0"
+              style={{ width: "140px", height: "64px", padding: "10px 16px" }}
             >
               <div className="relative w-full h-full">
                 <Image
@@ -59,7 +72,7 @@ export default function Clients() {
                   alt={logo.alt}
                   fill
                   className="object-contain"
-                  sizes="120px"
+                  sizes="140px"
                 />
               </div>
             </div>
