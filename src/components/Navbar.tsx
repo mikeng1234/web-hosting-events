@@ -6,7 +6,7 @@ const links = [
   { label: "About", href: "#about" },
   { label: "Services", href: "#services" },
   { label: "Portfolio", href: "#portfolio" },
-  { label: "Testimonials", href: "#testimonials" },
+  { label: "Clients", href: "#clients" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -49,9 +49,10 @@ export default function Navbar() {
 
         {/* Mobile hamburger */}
         <button
-          className="md:hidden flex flex-col justify-center gap-[5px] p-2"
+          className="md:hidden flex flex-col justify-center gap-[5px] p-2 min-h-[44px] min-w-[44px]"
           onClick={() => setMenuOpen((o) => !o)}
           aria-label="Toggle menu"
+          aria-expanded={menuOpen}
         >
           <span
             className={`block w-5 h-[1.5px] bg-ivory transition-all duration-300 origin-center ${menuOpen ? "rotate-45 translate-y-[6.5px]" : ""}`}

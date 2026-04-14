@@ -6,6 +6,7 @@
   --color-cream: #F2EBE0;
   --color-gold: #C4A76B;
   --color-gold-light: #D4BA85;
+  --color-gold-dark: #8B6E3A;   /* darkened gold for small text — passes WCAG AA 4.5:1 on ivory */
   --color-charcoal: #1C1C1C;
   --color-warm-gray: #6B6560;
   --color-dark-section: #111111;
@@ -29,20 +30,9 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Infinite logo marquee */
-@keyframes marquee {
-  0%   { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-.marquee-track {
-  display: flex;
-  width: max-content;
-  animation: marquee 28s linear infinite;
-}
-
-.marquee-track:hover {
-  animation-play-state: paused;
+/* Testimonials dark gradient background */
+.bg-testimonials {
+  background: linear-gradient(135deg, #1C1C1C 0%, #2C2520 100%);
 }
 
 /* Thin gold divider utility */

@@ -29,7 +29,7 @@ export default function Portfolio() {
       <div className="max-w-6xl mx-auto px-6">
         <FadeUp>
           <div className="text-center mb-16">
-            <p className="text-gold tracking-[0.25em] uppercase text-xs mb-4">Portfolio</p>
+            <p className="text-gold-dark tracking-[0.25em] uppercase text-xs mb-4">Portfolio</p>
             <h2 className="font-display text-4xl md:text-5xl text-charcoal leading-tight">Moments Hosted</h2>
             <span className="divider-gold" />
             <p className="text-warm-gray max-w-xl mx-auto">A glimpse into the events Nellie has been honored to host.</p>

@@ -1,9 +1,6 @@
 export default function Footer() {
   return (
-    <footer
-      className="py-10 px-6 text-center"
-      style={{ background: "#111111" }}
-    >
+    <footer className="py-10 px-6 text-center bg-dark-section">
       <p className="font-display text-xl text-ivory/80 mb-1">Host Nellie</p>
       <p className="text-warm-gray text-xs tracking-widest uppercase mb-6">
         Professional Event Host
@@ -13,7 +10,7 @@ export default function Footer() {
           (item) => (
             <a
               key={item}
-              href={`#${item.toLowerCase().replace(" ", "")}`}
+              href={`#${item.toLowerCase().replaceAll(" ", "")}`}
               className="text-warm-gray hover:text-gold transition-colors"
             >
               {item}

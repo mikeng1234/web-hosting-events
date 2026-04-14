@@ -23,7 +23,7 @@ const testimonials = [
 
 export default function Testimonials() {
   return (
-    <section id="testimonials" className="py-24" style={{ background: "linear-gradient(135deg, #1C1C1C 0%, #2C2520 100%)" }}>
+    <section id="testimonials" className="py-24 bg-testimonials">
       <div className="max-w-6xl mx-auto px-6">
         <FadeUp>
           <div className="text-center mb-16">

@@ -55,8 +55,10 @@ export default function Clients() {
       setItemWidth(containerRef.current.offsetWidth / visible);
     };
     measure();
-    window.addEventListener("resize", measure);
-    return () => window.removeEventListener("resize", measure);
+    let timer: ReturnType<typeof setTimeout>;
+    const debouncedMeasure = () => { clearTimeout(timer); timer = setTimeout(measure, 100); };
+    window.addEventListener("resize", debouncedMeasure);
+    return () => { window.removeEventListener("resize", debouncedMeasure); clearTimeout(timer); };
   }, []);
 
   const next = useCallback(() => setIndex((i) => i + 1), []);
@@ -128,7 +130,7 @@ export default function Clients() {
 
         {/* Right — heading */}
         <SlideRight delay={0.15} className="w-full md:w-1/2 flex flex-col justify-center px-8 py-10 md:px-14">
-          <p className="text-gold tracking-[0.25em] uppercase text-xs mb-3">Trusted By</p>
+          <p className="text-gold-dark tracking-[0.25em] uppercase text-xs mb-3">Trusted By</p>
           <h2 className="font-display text-3xl md:text-4xl text-charcoal leading-tight mb-4">
             Companies &amp; Brands
           </h2>
@@ -168,18 +170,21 @@ export default function Clients() {
         {/* Controls */}
         <div className="flex items-center justify-center gap-5 mt-8 px-6">
           <button onClick={prev} aria-label="Previous"
+            style={{ touchAction: "manipulation" }}
             className="w-9 h-9 rounded-full border border-charcoal/20 flex items-center justify-center text-charcoal/40 hover:border-gold hover:text-gold transition-colors">
             &#8592;
           </button>
           <div className="flex gap-1.5">
             {logos.map((_, i) => (
               <button key={i} onClick={() => setIndex(TOTAL + i)} aria-label={`Go to logo ${i + 1}`}
+                style={{ touchAction: "manipulation" }}
                 className={`rounded-full transition-all duration-300 ${
                   i === activeDot ? "bg-gold w-5 h-2" : "bg-charcoal/20 hover:bg-charcoal/40 w-2 h-2"
                 }`} />
             ))}
           </div>
           <button onClick={next} aria-label="Next"
+            style={{ touchAction: "manipulation" }}
             className="w-9 h-9 rounded-full border border-charcoal/20 flex items-center justify-center text-charcoal/40 hover:border-gold hover:text-gold transition-colors">
             &#8594;
           </button>

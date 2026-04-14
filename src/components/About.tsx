@@ -8,7 +8,7 @@ export default function About() {
         <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-center">
           {/* Photo — slides in from left */}
           <SlideLeft>
-            <div className="relative">
+            <div className="relative overflow-hidden">
               <div className="relative aspect-[3/4] overflow-hidden">
                 <Image
                   src="/images/nellie-portrait.png"
@@ -25,7 +25,7 @@ export default function About() {
 
           {/* Text — slides in from right */}
           <SlideRight delay={0.15}>
-            <p className="text-gold tracking-[0.25em] uppercase text-xs mb-4">
+            <p className="text-gold-dark tracking-[0.25em] uppercase text-xs mb-4">
               About
             </p>
             <h2 className="font-display text-4xl md:text-5xl text-charcoal leading-tight mb-6">

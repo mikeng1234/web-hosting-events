@@ -39,3 +39,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# CodeOps audit output (generated, not for version control)
+.standards-review/
+
+# Windows thumbnail cache
+Thumbs.db
+ehthumbs.db

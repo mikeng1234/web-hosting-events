@@ -13,7 +13,7 @@ export default function Contact() {
       <div className="max-w-4xl mx-auto px-6">
         <div className="grid md:grid-cols-2 gap-16 items-start">
           <SlideLeft>
-            <p className="text-gold tracking-[0.25em] uppercase text-xs mb-4">Get in Touch</p>
+            <p className="text-gold-dark tracking-[0.25em] uppercase text-xs mb-4">Get in Touch</p>
             <h2 className="font-display text-4xl md:text-5xl text-charcoal leading-tight mb-6">
               Let&apos;s talk about<br />your event
             </h2>
@@ -24,7 +24,7 @@ export default function Contact() {
             <ul className="space-y-5">
               {contactInfo.map((item) => (
                 <li key={item.label} className="flex gap-4 items-start">
-                  <span className="text-gold text-xs tracking-widest uppercase w-32 pt-0.5 shrink-0">{item.label}</span>
+                  <span className="text-gold-dark text-xs tracking-widest uppercase w-32 pt-0.5 shrink-0">{item.label}</span>
                   <a
                     href={item.href}
                     target={item.href.startsWith("http") ? "_blank" : undefined}

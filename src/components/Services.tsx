@@ -46,7 +46,7 @@ export default function Services() {
         {/* Header */}
         <FadeUp>
           <div className="text-center mb-16">
-            <p className="text-gold tracking-[0.25em] uppercase text-xs mb-4">
+            <p className="text-gold-dark tracking-[0.25em] uppercase text-xs mb-4">
               What I Do
             </p>
             <h2 className="font-display text-4xl md:text-5xl text-charcoal leading-tight">
