@@ -27,7 +27,7 @@ export default function BookNow() {
         <iframe
           src={CALENDLY_URL}
           width="100%"
-          height="700"
+          height="900"
           frameBorder="0"
           title="Book a session with Host Nellie"
           style={{ border: "none", display: "block" }}
