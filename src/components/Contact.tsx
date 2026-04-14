@@ -17,7 +17,7 @@ const contactInfo = [
   {
     label: "Facebook",
     value: "Host Nellie & Events",
-    href: "https://facebook.com/hostnellieandevents",
+    href: "https://www.facebook.com/HostNellie",
   },
 ];
 

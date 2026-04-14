@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { useState, useEffect, useCallback, useRef } from "react";
 
 const logos = [
   { src: "/images/companies/asialink.png", alt: "Asialink Finance Corporation" },
@@ -14,16 +17,47 @@ const logos = [
   { src: "/images/companies/pacific-plaza.png", alt: "Pacific Plaza Towers" },
 ];
 
-// Duplicate for seamless infinite loop
-const marqueeLogos = [...logos, ...logos];
+// Group logos into pages of 4
+const ITEMS_PER_PAGE = 4;
+const pages: typeof logos[] = [];
+for (let i = 0; i < logos.length; i += ITEMS_PER_PAGE) {
+  pages.push(logos.slice(i, i + ITEMS_PER_PAGE));
+}
+const TOTAL_PAGES = pages.length;
 
 export default function Clients() {
+  const [page, setPage] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const touchStartX = useRef(0);
+
+  const next = useCallback(
+    () => setPage((p) => (p + 1) % TOTAL_PAGES),
+    []
+  );
+  const prev = () => setPage((p) => (p - 1 + TOTAL_PAGES) % TOTAL_PAGES);
+
+  // Auto-advance every 3.5s, pauses on hover/touch
+  useEffect(() => {
+    if (paused) return;
+    const t = setInterval(next, 3500);
+    return () => clearInterval(t);
+  }, [paused, next]);
+
+  // Touch swipe
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+  const onTouchEnd = (e: React.TouchEvent) => {
+    const diff = touchStartX.current - e.changedTouches[0].clientX;
+    if (diff > 50) next();
+    else if (diff < -50) prev();
+  };
+
   return (
     <section id="clients" style={{ background: "#111111" }}>
-      {/* Top — split photo + heading */}
-      <div className="flex flex-col md:flex-row min-h-[360px]">
-        {/* Left: action photo */}
-        <div className="relative w-full md:w-2/5 min-h-[240px] md:min-h-0">
+      {/* Split: photo + heading */}
+      <div className="flex flex-col md:flex-row min-h-[320px]">
+        <div className="relative w-full md:w-2/5 min-h-[220px] md:min-h-0">
           <Image
             src="/images/portfolio/sample2.png"
             alt="Host Nellie speaking at a corporate event"
@@ -35,8 +69,7 @@ export default function Clients() {
           <div className="absolute inset-0 bg-black/30" />
         </div>
 
-        {/* Right: heading */}
-        <div className="w-full md:w-3/5 flex flex-col justify-center px-8 py-12 md:px-14">
+        <div className="w-full md:w-3/5 flex flex-col justify-center px-8 py-10 md:px-14">
           <p className="text-gold tracking-[0.25em] uppercase text-xs mb-3">
             Trusted By
           </p>
@@ -51,32 +84,79 @@ export default function Clients() {
         </div>
       </div>
 
-      {/* Bottom — infinite scrolling logo carousel */}
-      <div className="border-t border-white/10 py-10 overflow-hidden relative">
-        {/* Fade edges */}
-        <div className="absolute left-0 top-0 bottom-0 w-16 z-10 pointer-events-none"
-          style={{ background: "linear-gradient(to right, #111111, transparent)" }} />
-        <div className="absolute right-0 top-0 bottom-0 w-16 z-10 pointer-events-none"
-          style={{ background: "linear-gradient(to left, #111111, transparent)" }} />
-
-        <div className="marquee-track">
-          {marqueeLogos.map((logo, i) => (
-            <div
-              key={`${logo.alt}-${i}`}
-              className="mx-4 bg-white rounded-sm flex items-center justify-center shrink-0"
-              style={{ width: "140px", height: "64px", padding: "10px 16px" }}
-            >
-              <div className="relative w-full h-full">
-                <Image
-                  src={logo.src}
-                  alt={logo.alt}
-                  fill
-                  className="object-contain"
-                  sizes="140px"
-                />
+      {/* Carousel */}
+      <div
+        className="border-t border-white/10 px-6 md:px-14 pt-8 pb-10"
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
+      >
+        {/* Track — slides between pages */}
+        <div className="overflow-hidden">
+          <div
+            className="flex transition-transform duration-500 ease-in-out"
+            style={{ transform: `translateX(-${page * 100}%)` }}
+          >
+            {pages.map((pageLogos, pageIdx) => (
+              <div
+                key={pageIdx}
+                className="w-full shrink-0 grid grid-cols-2 md:grid-cols-4 gap-4"
+              >
+                {pageLogos.map((logo) => (
+                  <div
+                    key={logo.alt}
+                    className="bg-white rounded-sm flex items-center justify-center p-4 h-20"
+                  >
+                    <div className="relative w-full h-full">
+                      <Image
+                        src={logo.src}
+                        alt={logo.alt}
+                        fill
+                        className="object-contain"
+                        sizes="200px"
+                      />
+                    </div>
+                  </div>
+                ))}
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+        </div>
+
+        {/* Controls */}
+        <div className="flex items-center justify-center gap-6 mt-7">
+          {/* Prev */}
+          <button
+            onClick={prev}
+            aria-label="Previous"
+            className="w-8 h-8 flex items-center justify-center border border-white/20 text-white/50 hover:border-gold hover:text-gold transition-colors"
+          >
+            &#8592;
+          </button>
+
+          {/* Dots */}
+          <div className="flex gap-2">
+            {Array.from({ length: TOTAL_PAGES }).map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setPage(i)}
+                aria-label={`Go to page ${i + 1}`}
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                  i === page ? "bg-gold w-6" : "bg-white/20 hover:bg-white/40"
+                }`}
+              />
+            ))}
+          </div>
+
+          {/* Next */}
+          <button
+            onClick={next}
+            aria-label="Next"
+            className="w-8 h-8 flex items-center justify-center border border-white/20 text-white/50 hover:border-gold hover:text-gold transition-colors"
+          >
+            &#8594;
+          </button>
         </div>
       </div>
     </section>
