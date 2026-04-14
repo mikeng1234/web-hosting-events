@@ -89,8 +89,8 @@ export default function Clients() {
   return (
     <section id="clients" className="bg-ivory">
       {/* Split: photo + heading */}
-      <div className="flex flex-col md:flex-row min-h-[320px]">
-        <SlideLeft className="relative w-full md:w-2/5 min-h-[220px] md:min-h-0">
+      <div className="flex flex-col md:flex-row min-h-[480px]">
+        <SlideLeft className="relative w-full md:w-1/2 min-h-[360px] md:min-h-0">
           <Image
             src="/images/portfolio/sample2.png"
             alt="Host Nellie speaking at a corporate event"
@@ -102,7 +102,7 @@ export default function Clients() {
           <div className="absolute inset-0 bg-black/30" />
         </SlideLeft>
 
-        <SlideRight delay={0.15} className="w-full md:w-3/5 flex flex-col justify-center px-8 py-10 md:px-14">
+        <SlideRight delay={0.15} className="w-full md:w-1/2 flex flex-col justify-center px-8 py-10 md:px-14">
           <p className="text-gold tracking-[0.25em] uppercase text-xs mb-3">Trusted By</p>
           <h2 className="font-display text-3xl md:text-4xl text-charcoal leading-tight mb-4">
             Companies &amp; Brands
