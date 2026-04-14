@@ -1,5 +1,8 @@
+// background_color — matches site cream (#F2EBE0)
+// text_color       — site charcoal (#1C1C1C)
+// primary_color    — site gold (#C4A76B) — affects highlighted dates & CTA button
 const CALENDLY_URL =
-  "https://calendly.com/hostnellieandevents/30min?hide_landing_page_details=1&hide_gdpr_banner=1";
+  "https://calendly.com/hostnellieandevents/30min?hide_landing_page_details=1&hide_gdpr_banner=1&background_color=F2EBE0&text_color=1C1C1C&primary_color=C4A76B";
 
 export default function BookNow() {
   return (
