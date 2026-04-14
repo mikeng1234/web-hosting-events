@@ -87,7 +87,7 @@ export default function Clients() {
   const activeDot = ((index - TOTAL) % TOTAL + TOTAL) % TOTAL;
 
   return (
-    <section id="clients" style={{ background: "#111111" }}>
+    <section id="clients" className="bg-ivory">
       {/* Split: photo + heading */}
       <div className="flex flex-col md:flex-row min-h-[320px]">
         <SlideLeft className="relative w-full md:w-2/5 min-h-[220px] md:min-h-0">
@@ -104,11 +104,11 @@ export default function Clients() {
 
         <SlideRight delay={0.15} className="w-full md:w-3/5 flex flex-col justify-center px-8 py-10 md:px-14">
           <p className="text-gold tracking-[0.25em] uppercase text-xs mb-3">Trusted By</p>
-          <h2 className="font-display text-3xl md:text-4xl text-ivory leading-tight mb-4">
+          <h2 className="font-display text-3xl md:text-4xl text-charcoal leading-tight mb-4">
             Companies &amp; Brands
           </h2>
           <span className="block w-10 h-px bg-gold mb-4" />
-          <p className="text-cream/50 text-sm leading-relaxed max-w-md">
+          <p className="text-warm-gray text-sm leading-relaxed max-w-md">
             From corporate giants to beloved local brands — Nellie has hosted
             events for some of the Philippines&apos; most recognisable names.
           </p>
@@ -116,7 +116,7 @@ export default function Clients() {
       </div>
 
       {/* Carousel */}
-      <div className="border-t border-white/10 py-10">
+      <div className="border-t border-cream py-10">
         <div
           ref={containerRef}
           className="overflow-hidden"
@@ -134,7 +134,7 @@ export default function Clients() {
                 className="shrink-0 px-3"
                 style={{ width: itemWidth || "20%" }}
               >
-                <div className="bg-white rounded-sm flex items-center justify-center p-4 h-20">
+                <div className="flex items-center justify-center p-4 h-20">
                   <div className="relative w-full h-full">
                     <Image
                       src={logo.src}
@@ -155,7 +155,7 @@ export default function Clients() {
           <button
             onClick={prev}
             aria-label="Previous"
-            className="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center text-white/50 hover:border-gold hover:text-gold transition-colors"
+            className="w-9 h-9 rounded-full border border-charcoal/20 flex items-center justify-center text-charcoal/40 hover:border-gold hover:text-gold transition-colors"
           >
             &#8592;
           </button>
@@ -167,7 +167,7 @@ export default function Clients() {
                 onClick={() => setIndex(TOTAL + i)}
                 aria-label={`Go to logo ${i + 1}`}
                 className={`rounded-full transition-all duration-300 ${
-                  i === activeDot ? "bg-gold w-5 h-2" : "bg-white/20 hover:bg-white/40 w-2 h-2"
+                  i === activeDot ? "bg-gold w-5 h-2" : "bg-charcoal/20 hover:bg-charcoal/40 w-2 h-2"
                 }`}
               />
             ))}
@@ -176,7 +176,7 @@ export default function Clients() {
           <button
             onClick={next}
             aria-label="Next"
-            className="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center text-white/50 hover:border-gold hover:text-gold transition-colors"
+            className="w-9 h-9 rounded-full border border-charcoal/20 flex items-center justify-center text-charcoal/40 hover:border-gold hover:text-gold transition-colors"
           >
             &#8594;
           </button>
