@@ -20,13 +20,19 @@ const logos = [
 
 const TOTAL = logos.length;
 
+// Triple the logos: [...logos, ...logos, ...logos]
+// We start in the middle copy so we can slide left OR right seamlessly.
+const extended = [...logos, ...logos, ...logos];
+
 export default function Clients() {
-  const [current, setCurrent] = useState(0);
+  // Start at index TOTAL so the middle copy is shown first
+  const [index, setIndex] = useState(TOTAL);
+  const [animated, setAnimated] = useState(true);
   const [itemWidth, setItemWidth] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const touchStartX = useRef(0);
 
-  // Measure how wide each logo card should be (container / visible count)
+  // Measure item width on mount and resize
   useEffect(() => {
     const measure = () => {
       if (!containerRef.current) return;
@@ -38,19 +44,34 @@ export default function Clients() {
     return () => window.removeEventListener("resize", measure);
   }, []);
 
-  const next = useCallback(
-    () => setCurrent((c) => Math.min(c + 1, TOTAL - 1)),
-    []
-  );
-  const prev = () => setCurrent((c) => Math.max(c - 1, 0));
+  const next = useCallback(() => setIndex((i) => i + 1), []);
+  const prev = useCallback(() => setIndex((i) => i - 1), []);
 
-  // Auto-advance
+  // After each animated slide, check if we've drifted into a clone.
+  // If so, silently snap back to the equivalent position in the middle copy.
+  const onTransitionEnd = useCallback(() => {
+    if (index >= TOTAL * 2) {
+      setAnimated(false);
+      setIndex(index - TOTAL);
+    } else if (index < TOTAL) {
+      setAnimated(false);
+      setIndex(index + TOTAL);
+    }
+  }, [index]);
+
+  // Re-enable the transition one frame after the silent snap
   useEffect(() => {
-    const t = setInterval(() => {
-      setCurrent((c) => (c + 1 >= TOTAL ? 0 : c + 1));
-    }, 3500);
+    if (!animated) {
+      const id = requestAnimationFrame(() => setAnimated(true));
+      return () => cancelAnimationFrame(id);
+    }
+  }, [animated]);
+
+  // Auto-advance every 3.5 s
+  useEffect(() => {
+    const t = setInterval(next, 3500);
     return () => clearInterval(t);
-  }, []);
+  }, [next]);
 
   // Touch swipe
   const onTouchStart = (e: React.TouchEvent) => {
@@ -61,6 +82,9 @@ export default function Clients() {
     if (diff > 40) next();
     else if (diff < -40) prev();
   };
+
+  // The dot that lights up is always relative to the middle copy
+  const activeDot = ((index - TOTAL) % TOTAL + TOTAL) % TOTAL;
 
   return (
     <section id="clients" style={{ background: "#111111" }}>
@@ -93,22 +117,20 @@ export default function Clients() {
 
       {/* Carousel */}
       <div className="border-t border-white/10 py-10">
-        {/* Track */}
         <div
           ref={containerRef}
-          className="overflow-hidden px-0"
+          className="overflow-hidden"
           onTouchStart={onTouchStart}
           onTouchEnd={onTouchEnd}
         >
           <div
-            className="flex transition-transform duration-500 ease-in-out"
-            style={{
-              transform: itemWidth ? `translateX(-${current * itemWidth}px)` : "none",
-            }}
+            className={animated ? "flex transition-transform duration-500 ease-in-out" : "flex"}
+            style={{ transform: itemWidth ? `translateX(-${index * itemWidth}px)` : "none" }}
+            onTransitionEnd={onTransitionEnd}
           >
-            {logos.map((logo) => (
+            {extended.map((logo, i) => (
               <div
-                key={logo.alt}
+                key={`${logo.alt}-${i}`}
                 className="shrink-0 px-3"
                 style={{ width: itemWidth || "20%" }}
               >
@@ -130,38 +152,31 @@ export default function Clients() {
 
         {/* Controls */}
         <div className="flex items-center justify-center gap-5 mt-8 px-6">
-          {/* Prev */}
           <button
             onClick={prev}
-            disabled={current === 0}
             aria-label="Previous"
-            className="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center text-white/50 hover:border-gold hover:text-gold transition-colors disabled:opacity-20 disabled:cursor-not-allowed"
+            className="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center text-white/50 hover:border-gold hover:text-gold transition-colors"
           >
             &#8592;
           </button>
 
-          {/* Dots — one per logo */}
           <div className="flex gap-1.5">
             {logos.map((_, i) => (
               <button
                 key={i}
-                onClick={() => setCurrent(i)}
+                onClick={() => setIndex(TOTAL + i)}
                 aria-label={`Go to logo ${i + 1}`}
                 className={`rounded-full transition-all duration-300 ${
-                  i === current
-                    ? "bg-gold w-5 h-2"
-                    : "bg-white/20 hover:bg-white/40 w-2 h-2"
+                  i === activeDot ? "bg-gold w-5 h-2" : "bg-white/20 hover:bg-white/40 w-2 h-2"
                 }`}
               />
             ))}
           </div>
 
-          {/* Next */}
           <button
             onClick={next}
-            disabled={current === TOTAL - 1}
             aria-label="Next"
-            className="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center text-white/50 hover:border-gold hover:text-gold transition-colors disabled:opacity-20 disabled:cursor-not-allowed"
+            className="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center text-white/50 hover:border-gold hover:text-gold transition-colors"
           >
             &#8594;
           </button>
