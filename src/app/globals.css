@@ -1,0 +1,39 @@
+@import "tailwindcss";
+
+@theme {
+  /* Brand palette */
+  --color-ivory: #FDFAF5;
+  --color-cream: #F2EBE0;
+  --color-gold: #C4A76B;
+  --color-gold-light: #D4BA85;
+  --color-charcoal: #1C1C1C;
+  --color-warm-gray: #6B6560;
+  --color-dark-section: #111111;
+
+  /* Typography */
+  --font-display: var(--font-playfair);
+  --font-sans: var(--font-inter);
+
+  /* Spacing extras */
+  --spacing-section: 6rem;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-ivory);
+  color: var(--color-charcoal);
+  font-family: var(--font-inter), Georgia, serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Thin gold divider utility */
+.divider-gold {
+  display: block;
+  width: 3rem;
+  height: 1px;
+  background-color: var(--color-gold);
+  margin: 1.25rem auto;
+}
