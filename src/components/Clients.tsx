@@ -24,6 +24,7 @@ const logos = [
   { src: "/images/companies/data-lake.png",  alt: "Data Lake" },
   { src: "/images/companies/dentacare.png",  alt: "DentaCare Dental Clinic" },
   { src: "/images/companies/pacific-plaza.png", alt: "Pacific Plaza Towers" },
+  { src: "/images/companies/GreenGSM.png",      alt: "GreenGSM" },
 ];
 
 const TOTAL = logos.length;
