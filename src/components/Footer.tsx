@@ -30,6 +30,19 @@ export default function Footer() {
       <p className="text-warm-gray/40 text-xs">
         &copy; {new Date().getFullYear()} Host Nellie &amp; Events. All rights reserved.
       </p>
+
+      {/* GenXcript branding */}
+      <div className="mt-6 pt-6 border-t border-white/5">
+        <p className="text-warm-gray/30 text-xs mb-1">Powered by <span className="text-warm-gray/50 font-medium">GenXcript</span></p>
+        <a
+          href="https://www.facebook.com/GenNexaSmartHome"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-xs text-gold/50 hover:text-gold transition-colors duration-300 tracking-wide"
+        >
+          Want a website portfolio like this? Contact us now →
+        </a>
+      </div>
     </footer>
   );
 }
