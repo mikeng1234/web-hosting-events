@@ -21,6 +21,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -28,6 +29,7 @@ body {
   color: var(--color-charcoal);
   font-family: var(--font-inter), Georgia, serif;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 /* Testimonials dark gradient background */
